@@ -28,7 +28,7 @@
   --glass-border: rgba(255, 255, 255, 0.06);
   --glass-blur: blur(16px);
   
-  --cursor-size: 10px;
+
   --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-fast: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
@@ -80,52 +80,6 @@ p {
   font-weight: 300;
 }
 
-/* --- Custom Cursor --- */
-.custom-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: var(--cursor-size);
-  height: var(--cursor-size);
-  background-color: var(--color-clay);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  mix-blend-mode: difference;
-  transition: width 0.3s, height 0.3s, background-color 0.3s;
-  will-change: transform;
-}
-
-.custom-cursor-follower {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--color-clay-glow);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: transform 0.1s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
-  will-change: transform;
-}
-
-/* Hover States for Interactive Elements */
-.interactive-hover:hover ~ .custom-cursor {
-  width: 40px;
-  height: 40px;
-  background-color: rgba(255, 255, 255, 0.1);
-  mix-blend-mode: normal;
-  border: 1px solid var(--color-clay);
-}
-
-.interactive-hover:hover ~ .custom-cursor-follower {
-  width: 60px;
-  height: 60px;
-  border-color: var(--color-clay);
-}
 
 /* --- Layout Utilities --- */
 .section {

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   try { initLenis(); } catch (e) { console.error("Lenis init failed:", e); }
   try { initNavbarScroll(); } catch (e) { console.error("NavbarScroll init failed:", e); }
   try { initMobileMenu(); } catch (e) { console.error("MobileMenu init failed:", e); }
-  try { initCustomCursor(); } catch (e) { console.error("CustomCursor init failed:", e); }
+
   try { initCanvasParticles(); } catch (e) { console.error("CanvasParticles init failed:", e); }
   try { initProcessScroll(); } catch (e) { console.error("ProcessScroll init failed:", e); }
   try { initProductInteractions(); } catch (e) { console.error("ProductInteractions init failed:", e); }
@@ -132,66 +132,6 @@ function initMobileMenu() {
 
 
 
-/* ==========================================================================
-   2. Custom Fluid Cursor
-   ========================================================================== */
-function initCustomCursor() {
-  const cursor = document.getElementById('custom-cursor');
-  const follower = document.getElementById('custom-cursor-follower');
-
-  let mouseX = 0, mouseY = 0; // Actual mouse position
-  let cursorX = 0, cursorY = 0; // Current cursor position (lerped)
-  let followerX = 0, followerY = 0; // Current follower position (lerped)
-
-  window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
-
-  // Update positions inside RAF loop for butter-smooth movement
-  function updateCursor() {
-    // Lerp formulas: current = current + (target - current) * ease
-    cursorX += (mouseX - cursorX) * 0.15;
-    cursorY += (mouseY - cursorY) * 0.15;
-
-    followerX += (mouseX - followerX) * 0.08;
-    followerY += (mouseY - followerY) * 0.08;
-
-    cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
-    follower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0)`;
-
-    requestAnimationFrame(updateCursor);
-  }
-  updateCursor();
-
-  // Highlight cursor on links, inputs, and custom interactive components
-  const hoverElements = document.querySelectorAll('.interactive-hover, a, button, input, textarea, .gallery-item');
-  hoverElements.forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.style.width = '45px';
-      cursor.style.height = '45px';
-      cursor.style.backgroundColor = 'rgba(224, 83, 60, 0.1)';
-      cursor.style.mixBlendMode = 'normal';
-      cursor.style.border = '1.5px solid #E0533C';
-      
-      follower.style.width = '65px';
-      follower.style.height = '65px';
-      follower.style.borderColor = '#ff6a50';
-    });
-
-    el.addEventListener('mouseleave', () => {
-      cursor.style.width = '10px';
-      cursor.style.height = '10px';
-      cursor.style.backgroundColor = '#E0533C';
-      cursor.style.mixBlendMode = 'difference';
-      cursor.style.border = 'none';
-
-      follower.style.width = '40px';
-      follower.style.height = '40px';
-      follower.style.borderColor = 'rgba(224, 83, 60, 0.4)';
-    });
-  });
-}
 
 /* ==========================================================================
    3. Canvas Particle Engine (Ambient kiln ash & embers)
