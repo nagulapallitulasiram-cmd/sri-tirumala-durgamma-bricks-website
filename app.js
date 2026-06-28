@@ -850,39 +850,165 @@ function initQuotationForm() {
   const form = document.getElementById('contact-form');
   if (!form) return;
 
+  const nameInput = document.getElementById('form-name');
+  const phoneInput = document.getElementById('form-phone');
+  const emailInput = document.getElementById('form-email');
+  const locationInput = document.getElementById('form-location');
+  const requirementInput = document.getElementById('form-requirement');
+  const quantityInput = document.getElementById('form-quantity');
+  const messageInput = document.getElementById('form-message');
+  const successBanner = document.getElementById('form-success-msg');
+
+  function showError(inputElement, errorElementId, message) {
+    const errorElement = document.getElementById(errorElementId);
+    if (errorElement) {
+      errorElement.textContent = message;
+      errorElement.style.display = 'block';
+    }
+    if (inputElement) {
+      inputElement.style.borderColor = '#ff4d4d';
+    }
+  }
+
+  function clearError(inputElement, errorElementId) {
+    const errorElement = document.getElementById(errorElementId);
+    if (errorElement) {
+      errorElement.textContent = '';
+      errorElement.style.display = 'none';
+    }
+    if (inputElement) {
+      inputElement.style.borderColor = '';
+    }
+  }
+
   form.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    const name = document.getElementById('form-name').value.trim();
-    const phone = document.getElementById('form-phone').value.trim();
-    const location = document.getElementById('form-location').value.trim();
-    const requirement = document.getElementById('form-requirement').value;
-    const quantity = document.getElementById('form-quantity').value.trim();
-    const message = document.getElementById('form-message').value.trim();
+    // Clear previous errors
+    clearError(nameInput, 'form-name-error');
+    clearError(phoneInput, 'form-phone-error');
+    clearError(emailInput, 'form-email-error');
+    clearError(locationInput, 'form-location-error');
+    clearError(requirementInput, 'form-requirement-error');
+    clearError(quantityInput, 'form-quantity-error');
+    clearError(messageInput, 'form-message-error');
 
-    // Validate 10-digit phone number format (digits only)
-    const phoneReg = /^[0-9]{10}$/;
-    if (!phoneReg.test(phone)) {
-      alert('Please enter a valid 10-digit phone number (e.g., 9705959299).');
+    if (successBanner) {
+      successBanner.style.display = 'none';
+    }
+
+    let isValid = true;
+
+    // 1. Customer Name Validation
+    const nameValue = nameInput.value.trim();
+    const nameRegex = /^[A-Za-z\s]+$/;
+    if (!nameValue) {
+      showError(nameInput, 'form-name-error', 'Customer name is required.');
+      isValid = false;
+    } else if (nameValue.length < 3) {
+      showError(nameInput, 'form-name-error', 'Customer name must be at least 3 characters.');
+      isValid = false;
+    } else if (!nameRegex.test(nameValue)) {
+      showError(nameInput, 'form-name-error', 'Only alphabets and spaces are allowed.');
+      isValid = false;
+    }
+
+    // 2. Mobile Number Validation
+    const phoneValue = phoneInput.value.trim();
+    const isNumeric = /^\d+$/.test(phoneValue);
+    const isTenDigits = phoneValue.length === 10;
+    const startsWithValidDigit = /^[6-9]/.test(phoneValue);
+    const isAllSameDigits = /^(\d)\1{9}$/.test(phoneValue);
+
+    if (!phoneValue || !isNumeric || !isTenDigits || !startsWithValidDigit || isAllSameDigits) {
+      showError(phoneInput, 'form-phone-error', 'Please enter a valid Indian mobile number.');
+      isValid = false;
+    }
+
+    // 3. Email Address Validation
+    const emailValue = emailInput.value.trim();
+    if (emailValue !== '') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailValue)) {
+        showError(emailInput, 'form-email-error', 'Please enter a valid email address.');
+        isValid = false;
+      }
+    }
+
+    // 4. Delivery Location Validation
+    const locationValue = locationInput.value.trim();
+    if (!locationValue) {
+      showError(locationInput, 'form-location-error', 'Delivery location is required.');
+      isValid = false;
+    }
+
+    // 5. Product Required Validation
+    const requirementValue = requirementInput.value;
+    if (!requirementValue) {
+      showError(requirementInput, 'form-requirement-error', 'Product required selection is required.');
+      isValid = false;
+    }
+
+    // 6. Quantity Required Validation
+    const quantityValue = quantityInput.value.trim();
+    const parsedQuantity = parseInt(quantityValue, 10);
+    if (!quantityValue) {
+      showError(quantityInput, 'form-quantity-error', 'Quantity required is required.');
+      isValid = false;
+    } else if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
+      showError(quantityInput, 'form-quantity-error', 'Quantity must be greater than zero.');
+      isValid = false;
+    }
+
+    if (!isValid) {
       return;
     }
 
-    // Format WhatsApp message template
-    const whatsappMsg = `New Quotation Request
+    // Display success notification
+    if (successBanner) {
+      successBanner.style.display = 'block';
+    }
 
-Customer Name: ${name}
-Phone Number: ${phone}
-Location: ${location}
-Brick Type: ${requirement}
-Quantity Required: ${quantity}
-Message: ${message}`;
+    const emailText = emailValue ? emailValue : 'Not Provided';
+    const messageText = messageInput.value.trim() ? messageInput.value.trim() : 'None';
 
-    // Encode for safe URL transport
-    const encodedMsg = encodeURIComponent(whatsappMsg);
+    const whatsappMsg = `Brick Purchase Quotation Request
+
+Customer Name: ${nameValue}
+Mobile Number: ${phoneValue}
+Email Address:
+${emailText}
+Product: ${requirementValue}
+Quantity: ${parsedQuantity}
+Delivery Location: ${locationValue}
+Additional Requirements: ${messageText}`;
+
+    // Encode message
+    // Encode message safely, manually converting period, underscore, asterisk, and hyphen to prevent deep link wrapping/parsing issues
+    let encodedMsg = encodeURIComponent(whatsappMsg);
+    encodedMsg = encodedMsg
+      .replace(/\./g, '%2E')
+      .replace(/_/g, '%5F')
+      .replace(/\*/g, '%2A')
+      .replace(/-/g, '%2D');
+      
     const whatsappUrl = `https://wa.me/919705959299?text=${encodedMsg}`;
 
-    // Open WhatsApp in a new tab automatically
-    window.open(whatsappUrl, '_blank');
+    // Clear all fields and remove error states
+    form.reset();
+    clearError(nameInput, 'form-name-error');
+    clearError(phoneInput, 'form-phone-error');
+    clearError(emailInput, 'form-email-error');
+    clearError(locationInput, 'form-location-error');
+    clearError(requirementInput, 'form-requirement-error');
+    clearError(quantityInput, 'form-quantity-error');
+    clearError(messageInput, 'form-message-error');
+
+    // Automatically open WhatsApp (cross-device popup blocker safe)
+    const newWindow = window.open(whatsappUrl, '_blank');
+    if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+      window.location.href = whatsappUrl;
+    }
   });
 }
 

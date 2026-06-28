@@ -719,35 +719,50 @@
             <h2 class="section-title" style="font-size: clamp(2rem, 4vw, 3rem);">Request Quotation</h2>
           </div>
 
-          <form class="contact-form" id="contact-form">
+          <form class="contact-form" id="contact-form" novalidate>
+            <div id="form-success-msg" class="quotation-success-msg">
+              Your quotation request has been submitted successfully.
+            </div>
+
             <div class="form-group">
               <label for="form-name">Full Name</label>
-              <input type="text" id="form-name" placeholder="Enter your name" required class="interactive-hover">
+              <input type="text" id="form-name" placeholder="Enter your name" class="interactive-hover">
+              <span class="quotation-error-msg" id="form-name-error"></span>
             </div>
             <div class="form-group">
               <label for="form-phone">Phone Number</label>
-              <input type="tel" id="form-phone" placeholder="Enter 10-digit number" required class="interactive-hover" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" inputmode="numeric">
+              <input type="tel" id="form-phone" placeholder="Enter 10-digit number" class="interactive-hover" inputmode="numeric">
+              <span class="quotation-error-msg" id="form-phone-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="form-email">Email Address (Optional)</label>
+              <input type="email" id="form-email" placeholder="Enter your email" class="interactive-hover">
+              <span class="quotation-error-msg" id="form-email-error"></span>
             </div>
             <div class="form-group">
               <label for="form-location">Delivery Location</label>
-              <input type="text" id="form-location" placeholder="e.g. Vizag, Anakapalli, Chodavaram" required class="interactive-hover">
+              <input type="text" id="form-location" placeholder="e.g. Vizag, Anakapalli, Chodavaram" class="interactive-hover">
+              <span class="quotation-error-msg" id="form-location-error"></span>
             </div>
             <div class="form-group">
               <label for="form-requirement">Brick Requirement</label>
-              <select id="form-requirement" class="interactive-hover" style="background-color: rgba(255, 255, 255, 0.02); border: 1px solid var(--color-border); color: var(--color-text-primary); padding: 16px 20px; border-radius: 10px; font-family: var(--font-body); font-size: 1rem;" required>
+              <select id="form-requirement" class="interactive-hover" style="background-color: rgba(255, 255, 255, 0.02); border: 1px solid var(--color-border); color: var(--color-text-primary); padding: 16px 20px; border-radius: 10px; font-family: var(--font-body); font-size: 1rem;">
                 <option value="" disabled selected style="background-color:#0c0c0e; color:#555;">Choose Size Profile</option>
                 <option value="Standard 3x4x9" style="background-color:#0c0c0e;">Standard Size Red Brick (3 × 4 × 9 Inches)</option>
                 <option value="Large 3x6x9" style="background-color:#0c0c0e;">Large Size Red Brick (3 × 6 × 9 Inches)</option>
                 <option value="Both Sizing Profiles" style="background-color:#0c0c0e;">Both Sizes Required</option>
               </select>
+              <span class="quotation-error-msg" id="form-requirement-error"></span>
             </div>
-            <div class="form-group form-group-full">
+            <div class="form-group">
               <label for="form-quantity">Required Quantity</label>
-              <input type="number" id="form-quantity" placeholder="e.g. 10000" required class="interactive-hover">
+              <input type="number" id="form-quantity" placeholder="e.g. 10000" class="interactive-hover">
+              <span class="quotation-error-msg" id="form-quantity-error"></span>
             </div>
             <div class="form-group form-group-full">
-              <label for="form-message">Specific Instructions (Quantity & Location)</label>
-              <textarea id="form-message" placeholder="e.g. Need delivery by next week near Yelamanchili." required class="interactive-hover"></textarea>
+              <label for="form-message">Additional Requirements (Optional)</label>
+              <textarea id="form-message" placeholder="e.g. Need delivery by next week near Yelamanchili." class="interactive-hover"></textarea>
+              <span class="quotation-error-msg" id="form-message-error"></span>
             </div>
             <button type="submit" class="btn-submit interactive-hover">
               Submit Price Request

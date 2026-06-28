@@ -2028,4 +2028,36 @@ html, body, .section, .quality-card, .contact-card, .nav-container, .theme-float
   }
 }
 
+/* --- Quotation Form Custom Validation Styling --- */
+.quotation-success-msg {
+  display: none;
+  grid-column: span 2;
+  background-color: rgba(37, 211, 102, 0.1);
+  border: 1px solid #25D366;
+  color: #25D366;
+  padding: 14px 20px;
+  border-radius: 10px;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.light-theme .quotation-success-msg {
+  background-color: rgba(30, 126, 52, 0.08);
+  border-color: #1e7e34;
+  color: #1e7e34;
+}
+.quotation-error-msg {
+  color: #ff4d4d;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  display: none;
+  font-family: var(--font-body);
+  font-weight: 400;
+}
+.light-theme .quotation-error-msg {
+  color: #d93025;
+}
+
 
